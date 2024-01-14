@@ -1,5 +1,7 @@
 package ru.itmentor.spring.boot_security.demo.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -15,10 +17,11 @@ import javax.persistence.Table;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotBlank;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 @Entity
-@Table(name = "table_users1")
+@Table(name = "table_users2")
 public class User {
 
     @Id
@@ -41,16 +44,14 @@ public class User {
     @Column(name = "password")
     private String password;
 
+    @OneToMany(mappedBy = "users", cascade = CascadeType.ALL)
+    private List<Role> roles;
 
-    @ManyToOne
-    @JoinColumn(name = "role")
-    private Role roles;
-
-    public Role getRoles() {
+    public List<Role> getRoles() {
         return roles;
     }
 
-    public void setRoles(Role roles) {
+    public void setRoles(List<Role> roles) {
         this.roles = roles;
     }
 
@@ -66,7 +67,7 @@ public class User {
         this.password = password;
     }
 
-    public User(long id, String name, String lastName, int age, String password, Role roles) {
+    public User(long id, String name, String lastName, int age, String password, List<Role> roles) {
         this.id = id;
         this.name = name;
         this.lastName = lastName;

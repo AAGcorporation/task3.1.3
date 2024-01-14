@@ -9,12 +9,14 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import java.util.List;
 
 @Entity
-@Table(name = "table_roles1")
+@Table(name = "table_roles2")
 public class Role implements GrantedAuthority {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -22,9 +24,10 @@ public class Role implements GrantedAuthority {
 
     @Column(name = "name")
     private String roleName;
-    @OneToMany(mappedBy = "roles", cascade = CascadeType.ALL)
+    @ManyToOne
+    @JoinColumn(name = "users")
     @JsonIgnore
-    private List<User> users;
+    private User users;
 
     public Role() {
     }
@@ -58,11 +61,11 @@ public class Role implements GrantedAuthority {
         this.roleName = roleName;
     }
 
-    public List<User> getUsers() {
+    public User getUsers() {
         return users;
     }
 
-    public void setUsers( List<User>  users) {
+    public void setUsers( User  users) {
         this.users = users;
     }
 
