@@ -1,12 +1,16 @@
 package ru.itmentor.spring.boot_security.demo.model;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
 import javax.persistence.ManyToMany;
+import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotBlank;
@@ -14,12 +18,12 @@ import java.util.HashSet;
 import java.util.Set;
 
 @Entity
-@Table(name = "table_users")
+@Table(name = "table_users1")
 public class User {
 
     @Id
     @Column(name = "id")
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
     @Column(name = "name")
@@ -37,14 +41,16 @@ public class User {
     @Column(name = "password")
     private String password;
 
-    @ManyToMany
-    private Set<Role> roles = new HashSet<>();
 
-    public Set<Role> getRoles() {
+    @ManyToOne
+    @JoinColumn(name = "role")
+    private Role roles;
+
+    public Role getRoles() {
         return roles;
     }
 
-    public void setRoles(Set<Role> roles) {
+    public void setRoles(Role roles) {
         this.roles = roles;
     }
 
@@ -60,7 +66,7 @@ public class User {
         this.password = password;
     }
 
-    public User(long id, String name, String lastName, int age, String password, Set<Role> roles) {
+    public User(long id, String name, String lastName, int age, String password, Role roles) {
         this.id = id;
         this.name = name;
         this.lastName = lastName;

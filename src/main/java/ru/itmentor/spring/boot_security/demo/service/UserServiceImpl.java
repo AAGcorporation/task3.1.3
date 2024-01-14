@@ -1,10 +1,14 @@
 package ru.itmentor.spring.boot_security.demo.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Bean;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.itmentor.spring.boot_security.demo.Repository.RoleRepository;
 import ru.itmentor.spring.boot_security.demo.Repository.UserRepository;
+import ru.itmentor.spring.boot_security.demo.configs.WebSecurityConfig;
 import ru.itmentor.spring.boot_security.demo.model.Role;
 import ru.itmentor.spring.boot_security.demo.model.User;
 
@@ -28,8 +32,10 @@ public class UserServiceImpl implements UserService {
     @Transactional
     @Override
     public User addUser(User user) {
-        User savedUser = userRepository.saveAndFlush(user);
-        return savedUser;
+        BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
+        String bCryptPassword = encoder.encode(user.getPassword());
+        user.setPassword(bCryptPassword);
+        return userRepository.saveAndFlush(user);
     }
 
     @Transactional

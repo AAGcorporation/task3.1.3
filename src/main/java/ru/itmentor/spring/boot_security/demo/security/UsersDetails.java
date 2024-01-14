@@ -7,6 +7,7 @@ import ru.itmentor.spring.boot_security.demo.model.Role;
 import ru.itmentor.spring.boot_security.demo.model.User;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 
@@ -20,11 +21,13 @@ public class UsersDetails implements UserDetails {
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
+        String[] roles = user.getRoles().getRoleName().split(",");
         List<GrantedAuthority> authorities = new ArrayList<>();
-        for (Role role : user.getRoles()) {
-            authorities.add(new SimpleGrantedAuthority(role.getAuthority()));
+        List<String> resultList = Arrays.asList(roles);
+        for (String i : resultList) {
+            authorities.add(new SimpleGrantedAuthority(i));
         }
-        return user.getRoles();
+        return authorities;
     }
 
     @Override
